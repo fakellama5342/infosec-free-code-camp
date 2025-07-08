@@ -5,7 +5,7 @@ const app = express();
 app.use(helmet.hidePoweredBy());
 
 
-
+app.use(helmet.framguard({action: "deny"}));
 
 
 
