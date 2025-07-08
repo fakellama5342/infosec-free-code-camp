@@ -2,28 +2,31 @@ const express = require('express');
 const helmet = require('helmet');
 const app = express(); 
 
-
-app.use(helmet.hidePoweredBy());
-  
-app.use(helmet.frameguard({action: "deny"}));
-app.use(helmet.xssFilter());
-app.use(helmet.noSniff());
-app.use(helmet.ieNoOpen());
-const timeInsconds = 90 * 24 * 60 * 60;
-app.use(helmet.hsts({ maxAge: timeInsconds, force: true }));
-app.use(helmet.dnsPrefetchControl());
-app.use(helmet.noCache());
-
-app.use(helmet.contentSecurityPolicy({
-  directives: {
-    defaultSrc: ["'self'"],
-    scriptSrc: ["'self'", 'trusted-cdn.com']
+// Configure Helmet using the 'parent' helmet() Middleware
+// hidePoweredBy, xssFilter, and dnsPrefetchControl are enabled by default
+// when using the parent helmet() middleware, so they don't need explicit configuration
+// unless you want to disable them or change their default behavior.
+const timeInseconds = 90 * 24 * 60 * 60;
+app.use(helmet({
+  frameguard: {         // Configure frameguard
+    action: 'deny'
+  },
+  hsts: {               // Configure hsts
+    maxAge: timeInseconds,
+    force: true
+  },
+  noCache: true,        // Enable noCache (not enabled by default)
+  contentSecurityPolicy: { // Enable and configure contentSecurityPolicy
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", 'trusted-cdn.com']
+    }
   }
 }));
 
 
 module.exports = app;
-const api = require('./server.js');
+const api = require('./server.js'); // This specific disable is outside helmet, keep as is
 app.use(express.static('public'));
 app.disable('strict-transport-security');
 app.use('/_api', api);
@@ -34,5 +37,3 @@ let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`fakellama info security app started on port ${port}`);
 });
- 
-
