@@ -2,47 +2,11 @@ const express = require('express');
 const helmet = require('helmet');
 const app = express(); 
 
+
 app.use(helmet.hidePoweredBy());
 
 
-app.use(helmet.framguard({action: "deny"}));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+app.use(helmet.frameguard({action: "deny"}));
 
 
 module.exports = app;
@@ -57,4 +21,5 @@ let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`fakellama info security app started on port ${port}`);
 });
+
 
