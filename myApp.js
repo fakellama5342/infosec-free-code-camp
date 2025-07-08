@@ -4,10 +4,9 @@ const app = express();
 
 
 app.use(helmet.hidePoweredBy());
-
-
+  
 app.use(helmet.frameguard({action: "deny"}));
-
+app.use(helmet.xssFilter())
 
 module.exports = app;
 const api = require('./server.js');
@@ -21,5 +20,5 @@ let port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`fakellama info security app started on port ${port}`);
 });
-
+ 
 
