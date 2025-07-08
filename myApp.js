@@ -11,6 +11,7 @@ app.use(helmet.noSniff());
 app.use(helmet.ieNoOpen());
 const timeInsconds = 90 * 24 * 60 * 60;
 app.use(helmet.hsts({ maxAge: timeInsconds, force: true }));
+app.use(helmet.dnsPrefetchControl());
 
 module.exports = app;
 const api = require('./server.js');
